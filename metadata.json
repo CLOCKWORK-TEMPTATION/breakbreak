@@ -1,0 +1,7 @@
+{
+  "description": "BreakApp: A geo-dependent catering logistics platform for film crews.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "name": "BreakApp"
+}
