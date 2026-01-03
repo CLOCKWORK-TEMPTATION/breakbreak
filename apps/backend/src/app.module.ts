@@ -4,6 +4,10 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { ProjectModule } from './modules/project/project.module.js';
+import { GeoModule } from './modules/geo/geo.module.js';
+import { VendorModule } from './modules/vendor/vendor.module.js';
+import { OrderModule } from './modules/order/order.module.js';
+import { RealtimeModule } from './modules/realtime/realtime.module.js';
 
 @Module({
   imports: [
@@ -13,6 +17,10 @@ import { ProjectModule } from './modules/project/project.module.js';
     }),
     AuthModule,
     ProjectModule,
+    GeoModule,
+    VendorModule,
+    OrderModule,
+    RealtimeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
