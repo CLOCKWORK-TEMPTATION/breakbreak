@@ -16,6 +16,14 @@ export default function QRLoginPage() {
       setLoading(true);
       setError(null);
 
+      // Validate QR token format
+      const parts = qrToken.split(':');
+      if (parts.length !== 3) {
+        setError('Invalid QR code format');
+        setLoading(false);
+        return;
+      }
+
       // Generate device hash
       const deviceHash = generateDeviceHash();
 

@@ -108,9 +108,12 @@ export async function verifyToken(token: string): Promise<{ valid: boolean; payl
 
 /**
  * Generate device hash (fingerprint)
+ * Note: This is a client-side only function
  */
 export function generateDeviceHash(): string {
-  if (typeof window === 'undefined') return 'server-side';
+  if (typeof window === 'undefined') {
+    throw new Error('Device fingerprinting is only available on the client side');
+  }
 
   // Simple device fingerprint based on navigator properties
   const components = [

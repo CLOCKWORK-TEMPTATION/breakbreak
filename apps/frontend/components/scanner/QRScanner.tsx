@@ -43,8 +43,11 @@ export default function QRScanner({ onScan, onError }: QRScannerProps) {
           stopScanning();
         },
         (errorMessage) => {
-          // Scanning errors (can be ignored as they happen frequently)
-          // console.log('Scan error:', errorMessage);
+          // Scanning errors happen frequently during scanning process
+          // Only log in development mode
+          if (process.env.NODE_ENV === 'development') {
+            console.debug('Scan attempt:', errorMessage);
+          }
         }
       );
 

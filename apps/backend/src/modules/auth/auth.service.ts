@@ -6,6 +6,9 @@ import { PrismaService } from '../../database/prisma.service.js';
 import { Role } from '@prisma/client';
 import * as crypto from 'crypto';
 
+// Configuration constants
+const QR_TOKEN_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutes
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -67,10 +70,9 @@ export class AuthService {
 
       const [projectId, timestamp, signature] = parts;
 
-      // Check if token is not too old (e.g., 5 minutes)
+      // Check if token is not too old (5 minutes)
       const tokenAge = Date.now() - parseInt(timestamp);
-      const maxAge = 5 * 60 * 1000; // 5 minutes
-      if (tokenAge > maxAge) {
+      if (tokenAge > QR_TOKEN_EXPIRATION_MS) {
         return { projectId, valid: false };
       }
 
