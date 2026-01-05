@@ -6,9 +6,9 @@
  * assessment of your repository.
  */
 
-import { ReadinessService } from './modules/readiness/readiness.service';
-import { RepositoryAnalysisService } from './modules/readiness/repository-analysis.service';
-import { PromptGeneratorService } from './modules/readiness/prompt-generator.service';
+import { ReadinessService } from './readiness.service.js';
+import { RepositoryAnalysisService } from './repository-analysis.service.js';
+import { PromptGeneratorService } from './prompt-generator.service.js';
 
 // Initialize services
 const repositoryAnalysisService = new RepositoryAnalysisService();
@@ -35,16 +35,16 @@ async function generateProductionReadinessReport() {
   console.log('');
 
   console.log('📦 Detected Files:');
-  console.log(`   package.json: ${report.analysisData.hasPackageJson ? '✓' : '✗'}`);
-  console.log(`   Dockerfile: ${report.analysisData.hasDockerfile ? '✓' : '✗'}`);
-  console.log(`   Tests: ${report.analysisData.hasTests ? '✓' : '✗'}`);
-  console.log(`   CI/CD: ${report.analysisData.hasCI ? '✓' : '✗'}`);
-  console.log(`   README: ${report.analysisData.hasReadme ? '✓' : '✗'}`);
+  console.log(`   package.json: ${report.analysisData?.hasPackageJson ? '✓' : '✗'}`);
+  console.log(`   Dockerfile: ${report.analysisData?.hasDockerfile ? '✓' : '✗'}`);
+  console.log(`   Tests: ${report.analysisData?.hasTests ? '✓' : '✗'}`);
+  console.log(`   CI/CD: ${report.analysisData?.hasCI ? '✓' : '✗'}`);
+  console.log(`   README: ${report.analysisData?.hasReadme ? '✓' : '✗'}`);
   console.log('');
 
   // Step 2: Use the prompt with an AI service
   console.log('📝 AI Prompt Generated:');
-  console.log(`   Length: ${report.prompt.length} characters`);
+  console.log(`   Length: ${report.prompt?.length || 0} characters`);
   console.log('');
 
   // Example with OpenAI (uncomment and add API key to use)
@@ -120,10 +120,12 @@ async function generateProductionReadinessReport() {
 
   // For now, just save the prompt and analysis
   const fs = require('fs');
-  fs.writeFileSync(
-    'readiness-prompt.txt',
-    report.prompt
-  );
+  if (report.prompt) {
+    fs.writeFileSync(
+      'readiness-prompt.txt',
+      report.prompt
+    );
+  }
   
   fs.writeFileSync(
     'readiness-analysis.json',

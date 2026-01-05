@@ -215,7 +215,15 @@ export class RepositoryAnalysisService {
   /**
    * Check if repository has test files
    */
-  private async hasTestFiles(repositoryPath: string): Promise<boolean> {
+  private async hasTestFiles(
+    repositoryPath: string,
+    depth = 0,
+  ): Promise<boolean> {
+    const maxDepth = 3; // Limit recursion depth
+    if (depth >= maxDepth) {
+      return false;
+    }
+
     const testPatterns = [
       'test',
       'tests',
@@ -229,36 +237,44 @@ export class RepositoryAnalysisService {
       'test_*.py',
     ];
 
+    // Pre-compile regular expressions for better performance
+    const regexPatterns = testPatterns.map((pattern) =>
+      new RegExp(pattern.replace('*', '.*')),
+    );
+
     try {
       const entries = await fs.readdir(repositoryPath, { withFileTypes: true });
 
       for (const entry of entries) {
-        if (
-          entry.name.startsWith('.') ||
-          entry.name === 'node_modules'
-        ) {
+        if (entry.name.startsWith('.') || entry.name === 'node_modules') {
           continue;
         }
 
-        for (const pattern of testPatterns) {
-          if (
-            entry.name.includes(pattern) ||
-            entry.name.match(new RegExp(pattern.replace('*', '.*')))
-          ) {
-            return true;
-          }
+        // Check if name matches any pattern
+        const matchesPattern = testPatterns.some(
+          (pattern) => entry.name.includes(pattern),
+        );
+        const matchesRegex = regexPatterns.some((regex) =>
+          entry.name.match(regex),
+        );
+
+        if (matchesPattern || matchesRegex) {
+          return true;
         }
 
-        // Check subdirectories
+        // Check subdirectories with depth limit
         if (entry.isDirectory()) {
           const subPath = path.join(repositoryPath, entry.name);
-          if (await this.hasTestFiles(subPath)) {
+          if (await this.hasTestFiles(subPath, depth + 1)) {
             return true;
           }
         }
       }
     } catch (error) {
-      console.error('Error checking for test files:', error);
+      console.error(
+        `Error checking for test files in ${repositoryPath}:`,
+        error,
+      );
     }
 
     return false;
@@ -339,7 +355,7 @@ export class RepositoryAnalysisService {
         }
       }
     } catch (error) {
-      // Ignore errors
+      console.error(`Error reading files in directory ${dirPath}:`, error);
     }
 
     return files;

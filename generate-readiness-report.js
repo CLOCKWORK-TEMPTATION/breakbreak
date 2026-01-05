@@ -34,7 +34,7 @@ const options = {
 for (let i = 0; i < args.length; i += 2) {
   const key = args[i].replace('--', '');
   const value = args[i + 1];
-  if (options.hasOwnProperty(key)) {
+  if (Object.prototype.hasOwnProperty.call(options, key)) {
     options[key] = value;
   }
 }
