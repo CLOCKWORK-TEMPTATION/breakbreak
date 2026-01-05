@@ -8,6 +8,7 @@ import { GeoModule } from './modules/geo/geo.module.js';
 import { VendorModule } from './modules/vendor/vendor.module.js';
 import { OrderModule } from './modules/order/order.module.js';
 import { RealtimeModule } from './modules/realtime/realtime.module.js';
+import { ReadinessModule } from './modules/readiness/readiness.module.js';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RealtimeModule } from './modules/realtime/realtime.module.js';
     VendorModule,
     OrderModule,
     RealtimeModule,
+    ReadinessModule,
   ],
   controllers: [AppController],
   providers: [AppService],
