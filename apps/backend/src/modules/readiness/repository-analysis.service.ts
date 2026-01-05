@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
@@ -22,6 +22,24 @@ export interface AnalysisData {
 
 @Injectable()
 export class RepositoryAnalysisService {
+  private readonly logger = new Logger(RepositoryAnalysisService.name);
+  private static readonly MAX_RECURSION_DEPTH = 3;
+  private static readonly TEST_PATTERNS = [
+    'test',
+    'tests',
+    '__tests__',
+    'spec',
+    '*.test.ts',
+    '*.test.js',
+    '*.spec.ts',
+    '*.spec.js',
+    '*_test.py',
+    'test_*.py',
+  ];
+  private static readonly TEST_PATTERN_REGEXES = RepositoryAnalysisService.TEST_PATTERNS.map(
+    (pattern) => new RegExp(pattern.replace(/\*/g, '.*')),
+  );
+
   /**
    * Analyze the repository structure and content
    */
@@ -117,7 +135,7 @@ export class RepositoryAnalysisService {
       // Detect primary languages
       analysisData.primaryLanguages = await this.detectLanguages(repositoryPath);
     } catch (error) {
-      console.error('Error analyzing repository:', error);
+      this.logger.error('Error analyzing repository:', error);
     }
 
     return analysisData;
@@ -206,7 +224,7 @@ export class RepositoryAnalysisService {
         }
       }
     } catch (error) {
-      console.error(`Error reading directory ${dirPath}:`, error);
+      this.logger.error(`Error reading directory ${dirPath}:`, error);
     }
 
     return structure;
@@ -219,28 +237,9 @@ export class RepositoryAnalysisService {
     repositoryPath: string,
     depth = 0,
   ): Promise<boolean> {
-    const maxDepth = 3; // Limit recursion depth
-    if (depth >= maxDepth) {
+    if (depth >= RepositoryAnalysisService.MAX_RECURSION_DEPTH) {
       return false;
     }
-
-    const testPatterns = [
-      'test',
-      'tests',
-      '__tests__',
-      'spec',
-      '*.test.ts',
-      '*.test.js',
-      '*.spec.ts',
-      '*.spec.js',
-      '*_test.py',
-      'test_*.py',
-    ];
-
-    // Pre-compile regular expressions for better performance
-    const regexPatterns = testPatterns.map((pattern) =>
-      new RegExp(pattern.replace('*', '.*')),
-    );
 
     try {
       const entries = await fs.readdir(repositoryPath, { withFileTypes: true });
@@ -251,11 +250,11 @@ export class RepositoryAnalysisService {
         }
 
         // Check if name matches any pattern
-        const matchesPattern = testPatterns.some(
+        const matchesPattern = RepositoryAnalysisService.TEST_PATTERNS.some(
           (pattern) => entry.name.includes(pattern),
         );
-        const matchesRegex = regexPatterns.some((regex) =>
-          entry.name.match(regex),
+        const matchesRegex = RepositoryAnalysisService.TEST_PATTERN_REGEXES.some(
+          (regex) => entry.name.match(regex),
         );
 
         if (matchesPattern || matchesRegex) {
@@ -271,7 +270,7 @@ export class RepositoryAnalysisService {
         }
       }
     } catch (error) {
-      console.error(
+      this.logger.error(
         `Error checking for test files in ${repositoryPath}:`,
         error,
       );
@@ -313,7 +312,7 @@ export class RepositoryAnalysisService {
         }
       }
     } catch (error) {
-      console.error('Error detecting languages:', error);
+      this.logger.error('Error detecting languages:', error);
     }
 
     return Array.from(languages);
@@ -324,9 +323,8 @@ export class RepositoryAnalysisService {
    */
   private async getAllFiles(dirPath: string, depth = 0): Promise<string[]> {
     const files: string[] = [];
-    const maxDepth = 3;
 
-    if (depth >= maxDepth) {
+    if (depth >= RepositoryAnalysisService.MAX_RECURSION_DEPTH) {
       return files;
     }
 
@@ -355,7 +353,7 @@ export class RepositoryAnalysisService {
         }
       }
     } catch (error) {
-      console.error(`Error reading files in directory ${dirPath}:`, error);
+      this.logger.error(`Error reading files in directory ${dirPath}:`, error);
     }
 
     return files;
