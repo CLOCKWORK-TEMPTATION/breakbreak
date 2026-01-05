@@ -39,10 +39,10 @@ for (let i = 0; i < args.length; i += 2) {
   }
 }
 
-console.log('🔍 Generating Production Readiness Report...');
-console.log(`   Owner: ${options.owner}`);
-console.log(`   Repo: ${options.repo}`);
-console.log(`   Path: ${options.path}`);
+console.log('🔍 جاري توليد تقرير جاهزية الإنتاج... | Generating Production Readiness Report...');
+console.log(`   المالك | Owner: ${options.owner}`);
+console.log(`   المستودع | Repo: ${options.repo}`);
+console.log(`   المسار | Path: ${options.path}`);
 console.log('');
 
 // Make HTTP request to the API
@@ -77,33 +77,35 @@ const req = http.request(requestOptions, (res) => {
         
         // Save to file
         fs.writeFileSync(options.output, JSON.stringify(report, null, 2));
-        console.log('✅ Report generated successfully!');
-        console.log(`   Output: ${options.output}`);
+        console.log('✅ تم توليد التقرير بنجاح! | Report generated successfully!');
+        console.log(`   الملف | Output: ${options.output}`);
         console.log('');
         
         // Display summary
         if (report.metadata) {
-          console.log('📊 Summary:');
-          console.log(`   Repository: ${report.metadata.repository}`);
-          console.log(`   Date: ${report.metadata.reportDate}`);
-          console.log(`   Languages: ${report.metadata.primaryLanguages.join(', ')}`);
+          console.log('📊 الملخص | Summary:');
+          console.log(`   المستودع | Repository: ${report.metadata.repository}`);
+          console.log(`   التاريخ | Date: ${report.metadata.reportDate}`);
+          console.log(`   اللغات | Languages: ${report.metadata.primaryLanguages.join(', ')}`);
           console.log('');
         }
         
         if (report.analysisData) {
-          console.log('📦 Repository Analysis:');
+          console.log('📦 تحليل المستودع | Repository Analysis:');
           console.log(`   package.json: ${report.analysisData.hasPackageJson ? '✓' : '✗'}`);
           console.log(`   Dockerfile: ${report.analysisData.hasDockerfile ? '✓' : '✗'}`);
-          console.log(`   Tests: ${report.analysisData.hasTests ? '✓' : '✗'}`);
+          console.log(`   الاختبارات | Tests: ${report.analysisData.hasTests ? '✓' : '✗'}`);
           console.log(`   CI/CD: ${report.analysisData.hasCI ? '✓' : '✗'}`);
           console.log(`   README: ${report.analysisData.hasReadme ? '✓' : '✗'}`);
           console.log('');
         }
         
         if (report.prompt) {
-          console.log('📝 AI Prompt:');
+          console.log('📝 الـ Prompt للذكاء الاصطناعي | AI Prompt:');
+          console.log('   تم تضمين الـ prompt في التقرير.');
           console.log('   The generated prompt is included in the report.');
-          console.log('   Use it with an AI service (e.g., OpenAI, Gemini) to generate the full assessment.');
+          console.log('   استخدمه مع ChatGPT أو Gemini أو Claude للحصول على تقييم كامل.');
+          console.log('   Use it with ChatGPT, Gemini, or Claude to get a full assessment.');
           console.log('');
         }
         
@@ -121,10 +123,10 @@ const req = http.request(requestOptions, (res) => {
 });
 
 req.on('error', (error) => {
-  console.error('❌ Error connecting to the API:');
+  console.error('❌ خطأ في الاتصال بالـ API | Error connecting to the API:');
   console.error(`   ${error.message}`);
   console.error('');
-  console.error('Make sure the backend server is running:');
+  console.error('تأكد من تشغيل خادم الخلفية | Make sure the backend server is running:');
   console.error(`   cd apps/backend && pnpm run dev`);
   console.error('');
   process.exit(1);

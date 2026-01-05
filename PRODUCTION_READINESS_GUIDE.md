@@ -1,28 +1,33 @@
-# Production Readiness Report Generator
+# مولد تقرير جاهزية الإنتاج | Production Readiness Report Generator
 
-## Overview
+> **ملاحظة هامة:** جميع التقارير والتوصيات تُقدم باللغة العربية الفصحى الاحترافية  
+> **Important Note:** All reports and recommendations are provided in professional Arabic
 
-The Production Readiness Report Generator is an automated tool that analyzes your repository and generates a comprehensive assessment of your application's readiness for production deployment. It evaluates 10 critical engineering domains and provides actionable recommendations in Arabic.
+## نظرة عامة | Overview
 
-## Features
+مولد تقرير جاهزية الإنتاج هو أداة آلية تحلل المستودع وتولد تقييماً شاملاً لجاهزية التطبيق للنشر في بيئة الإنتاج. يقيم الأداة 10 مجالات هندسية حرجة ويوفر توصيات قابلة للتنفيذ **باللغة العربية**.
 
-- **Automated Repository Analysis**: Scans your codebase for key files, configurations, and patterns
-- **10-Domain Evaluation Framework**: Comprehensive assessment across:
-  1. الوظائف الأساسية (Core Functionality)
-  2. الأداء (Performance)
-  3. الأمان (Security)
-  4. البنية التحتية (Infrastructure)
-  5. المراقبة والسجلات (Monitoring & Logging)
-  6. النسخ الاحتياطي والاستعادة (Backup & Recovery)
-  7. التوثيق (Documentation)
-  8. الاختبار (Testing)
-  9. التوافق (Compatibility)
-  10. الامتثال (Compliance)
-- **AI-Ready Prompt Generation**: Creates a detailed prompt for AI services to generate comprehensive reports
-- **Arabic Language Support**: All reports and recommendations are provided in professional Arabic
-- **Prioritized Recommendations**: P0 (Critical) to P3 (Low) priority classification
+The Production Readiness Report Generator is an automated tool that analyzes your repository and generates a comprehensive assessment of your application's readiness for production deployment. It evaluates 10 critical engineering domains and provides actionable recommendations **in Arabic**.
 
-## Architecture
+## المميزات | Features
+
+- **تحليل آلي للمستودع**: فحص الكود للبحث عن الملفات والإعدادات والأنماط الرئيسية
+- **إطار تقييم من 10 مجالات**: تقييم شامل عبر:
+  1. **الوظائف الأساسية** (Core Functionality)
+  2. **الأداء** (Performance)
+  3. **الأمان** (Security)
+  4. **البنية التحتية** (Infrastructure)
+  5. **المراقبة والسجلات** (Monitoring & Logging)
+  6. **النسخ الاحتياطي والاستعادة** (Backup & Recovery)
+  7. **التوثيق** (Documentation)
+  8. **الاختبار** (Testing)
+  9. **التوافق** (Compatibility)
+  10. **الامتثال** (Compliance)
+- **توليد Prompt جاهز للذكاء الاصطناعي**: ينشئ prompt مفصل لخدمات AI لتوليد تقارير شاملة
+- **دعم اللغة العربية الكامل**: جميع التقارير والتوصيات باللغة العربية الفصحى
+- **توصيات مرتبة حسب الأولوية**: تصنيف من P0 (حرج) إلى P3 (منخفض)
+
+## البنية المعمارية | Architecture
 
 ### Backend Module Structure
 
